@@ -7,6 +7,7 @@ export default function Home() {
   const appPackageName = 'com.thebrassstargroup.rtduserapp'; // Package name of the app
   const appScheme = `intent://${appPackageName}/#Intent;scheme=${appPackageName};package=${appPackageName};end`;
   const appStoreUrl = `https://play.google.com/store/apps/details?id=${appPackageName}`;
+  const appStoreUrliOS = `https://apps.apple.com/app/${appPackageName}`; // Modify this with the correct App Store URL
 
   useEffect(() => {
     // Check if the app is installed
@@ -27,9 +28,15 @@ export default function Home() {
       // Open the app using the custom URI scheme
       window.location.href = appScheme;
     } else {
-      // Redirect to the Play Store
+      // Redirect to the appropriate store based on the device
+      const appStoreUrl = isiOS() ? appStoreUrliOS : appStoreUrl;
       window.open(appStoreUrl, '_blank');
     }
+  };
+
+  const isiOS = () => {
+    const userAgent = navigator.userAgent;
+    return /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
   };
 
   return (
