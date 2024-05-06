@@ -24,8 +24,11 @@ export default function Home() {
   }, []);
 
   const isiOS = () => {
-    const userAgent = navigator.userAgent;
-    return /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+    if (typeof navigator !== 'undefined') {
+      const userAgent = navigator.userAgent;
+      return /iPad|iPhone|iPod/.test(userAgent) && !!(window as any).MSStream;
+    }
+    return false;
   };
 
   const openApp = () => {
