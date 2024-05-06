@@ -7,8 +7,8 @@ export default function Home() {
   const appScheme = 'thebrassstargroup-rtd'; // Replace with your app scheme
   const appPackageName = 'com.thebrassstargroup.rtduserapp'; // Package name of the app
   const appStoreUrl = `https://play.google.com/store/apps/details?id=${appPackageName}`;
-  const appStoreUrliOS = `https://apps.apple.com/app/${appPackageName}`; // Modify this with the correct App Store URL
-
+  const appStoreUrliOS = `https://apps.apple.com/in/app/rtd-transit-watch/id872831137`; // Modify this with the correct App Store URL
+  
   useEffect(() => {
     // Check if the app is installed
     const checkAppInstalled = () => {
