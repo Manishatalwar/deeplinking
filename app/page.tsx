@@ -1,12 +1,11 @@
 // // pages/index.js
 "use client";
+
 import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [appInstalled, setAppInstalled] = useState(false);
   const appPackageName = 'com.thebrassstargroup.rtduserapp'; // Package name of the app
-  const appScheme = `intent://${appPackageName}/#Intent;scheme=${appPackageName};end`;
-
   const appStoreUrl = `https://play.google.com/store/apps/details?id=${appPackageName}`;
   const appStoreUrliOS = `https://apps.apple.com/app/${appPackageName}`; // Modify this with the correct App Store URL
 
@@ -37,8 +36,8 @@ export default function Home() {
     if (appInstalled) {
       console.log("appInstalled",appInstalled);
       
-      // Open the app using the custom URI scheme
-      window.location.href = appScheme;
+      // Open the app using Universal Links for iOS and App Links for Android
+      window.location.href = `https://${appPackageName}.com`; // Update with your actual Universal Link or App Link
     } else {
       // Redirect to the appropriate store based on the device
       if (isiOS()) {
