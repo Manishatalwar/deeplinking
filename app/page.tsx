@@ -5,7 +5,8 @@ import { useState, useEffect } from 'react';
 export default function Home() {
   const [appInstalled, setAppInstalled] = useState(false);
   const appPackageName = 'com.thebrassstargroup.rtduserapp'; // Package name of the app
-  const appScheme = `intent://${appPackageName}/#Intent;scheme=${appPackageName};package=${appPackageName};end`;
+  const appScheme = `intent://${appPackageName}/#Intent;scheme=${appPackageName};end`;
+
   const appStoreUrl = `https://play.google.com/store/apps/details?id=${appPackageName}`;
   const appStoreUrliOS = `https://apps.apple.com/app/${appPackageName}`; // Modify this with the correct App Store URL
 
@@ -31,17 +32,23 @@ export default function Home() {
     return false;
   };
 
+
   const openApp = () => {
     if (appInstalled) {
+      console.log("appInstalled",appInstalled);
+      
       // Open the app using the custom URI scheme
       window.location.href = appScheme;
     } else {
       // Redirect to the appropriate store based on the device
-      const storeUrl = isiOS() ? appStoreUrliOS : appStoreUrl;
-      window.open(storeUrl, '_blank');
+      if (isiOS()) {
+        window.location.href = appStoreUrliOS; // Redirect to App Store for iOS
+      } else {
+        window.location.href = appStoreUrl; // Redirect to Play Store for Android
+      }
     }
   };
-
+  
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gray-100">
       <div className="text-center border p-6 sm:p-16 rounded-lg">
