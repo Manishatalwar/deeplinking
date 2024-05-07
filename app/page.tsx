@@ -22,15 +22,6 @@ export default function Home() {
 
     checkAppInstalled();
   }, []);
-  // const isAppInstallediOS = () => {
-  //   // Check if the device is iOS and the app can be opened
-  //   return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
-  // };
-
-  // const isAppInstalledAndroid = () => {
-  //   // Check if the app can be opened on Android
-  //   return window.document && window.document.URL.indexOf(appScheme) !== -1;
-  // };
   const isAppInstallediOS = () => {
     // Check if the device is iOS and the app can be opened
     return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
@@ -38,9 +29,18 @@ export default function Home() {
 
   const isAppInstalledAndroid = () => {
     // Check if the app can be opened on Android
-    // We assume the app is installed if it's being opened from an Android device
-    return /Android/i.test(navigator.userAgent);
+    return window.document && window.document.URL.indexOf(appScheme) !== -1;
   };
+  // const isAppInstallediOS = () => {
+  //   // Check if the device is iOS and the app can be opened
+  //   return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
+  // };
+
+  // const isAppInstalledAndroid = () => {
+  //   // Check if the app can be opened on Android
+  //   // We assume the app is installed if it's being opened from an Android device
+  //   return /Android/i.test(navigator.userAgent);
+  // };
 
   const redirectToAppStore = () => {
     // Redirect to Play Store for Android or App Store for iOS
@@ -54,19 +54,21 @@ export default function Home() {
   };
 
   const handleButtonClick = () => {
-    // Attempt to open the app
-      window.location.href = appScheme;
-      
-      // Check if the app was opened
-      setTimeout(() => {
-        if (!document.hidden) {
-          console.log("App opened successfully!");
-        } else {
-          console.log("Failed to open the app.");
-          redirectToAppStore(); // Redirect to app store as a fallback
-        }
-      }, 1000); // Wait for 1 second before checking
-  };
+    console.log("appInstalled",appInstalled);
+    if (appInstalled) {
+            window.location.href = appScheme; // Open the app
+          } else {
+            const userAgent = navigator.userAgent || navigator.vendor;
+            if (/android/i.test(userAgent)) {
+              window.location.href = appStoreUrl; // Redirect to Play Store
+            } else {
+              redirectToAppStore(); // Redirect to App Store for iOS
+            }
+          }
+   
+  
+   };
+  
   
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gray-100">
@@ -105,7 +107,7 @@ export default function Home() {
           </div>
         </button>
 
-        <button onClick={handleButtonClick} className="w-full h-16 sm:h-20 border border-red-500 text-red-500 text-lg sm:text-xl font-semibold py-2 sm:py-3 rounded-lg flex items-center justify-center hover:bg-red-100 transition duration-300">
+      <button onClick={handleButtonClick} className="w-full h-16 sm:h-20 border border-red-500 text-red-500 text-lg sm:text-xl font-semibold py-2 sm:py-3 rounded-lg flex items-center justify-center hover:bg-red-100 transition duration-300">
             <div className='mb-5 mr-2'>
               <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd">
                 <path d="M22 24h-20v-24h14l6 6v18zm-7-23h-12v22h18v-16h-6v-6zm3 15v1h-12v-1h12zm0-3v1h-12v-1h12zm0-3v1h-12v-1h12zm-2-4h4.586l-4.586-4.586v4.586z"/>
