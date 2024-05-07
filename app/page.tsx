@@ -44,8 +44,14 @@ export default function Home() {
         setAppOpened(true);
         alert("App opened successfully!");
       } else {
-        alert("Failed to open the app.");
-        redirectToAppStore();
+        if(document.hidden){
+          alert("Again App opened successfully!");
+        }
+        else{
+          alert("Second Failed to open the app.");
+          redirectToAppStore();
+        }
+      
       }
     } catch (error) {
       alert(error);
