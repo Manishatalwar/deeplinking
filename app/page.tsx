@@ -81,21 +81,19 @@
 //     </main>
 //   );
 // }
-
 import { useState, useEffect } from 'react';
 
 export default function Home() {
   const [appInstalled, setAppInstalled] = useState(false);
   const appPackageName = 'com.thebrassstargroup.rtduserapp'; // Package name of the app
-  const appScheme = 'thebrassstargroup-rtd://'; // Custom URI scheme for our app
+  const appScheme = 'thebrassstargroup-rtd://'; // Custom URI scheme for your app
 
   useEffect(() => {
     // Check if the app is installed
     const checkAppInstalled = () => {
-      // Check if the app scheme can be invoked
       const timer = setTimeout(() => {
-        setAppInstalled(true); // Assume app is installed if URI scheme is invoked
-      }, 2000); // Set a timeout to check if the app scheme is invoked after 2 seconds
+        setAppInstalled(false); // Assume app is not installed if URI scheme is not invoked after 2 seconds
+      }, 2000); // Set a timeout to assume the app is not installed after 2 seconds
 
       window.addEventListener('pagehide', () => {
         clearTimeout(timer); // Clear the timeout when the page is hidden
@@ -107,14 +105,18 @@ export default function Home() {
     checkAppInstalled();
   }, []);
 
-  const redirectToAppStore = () => {
-    // Redirect to Play Store for Android or App Store for iOS
-    const userAgent = navigator.userAgent || navigator.vendor;
+  const redirectToPlayStore = () => {
+    // Redirect to Play Store
+    window.location.href = `https://play.google.com/store/apps/details?id=${appPackageName}`;
+  };
 
-    if (/android/i.test(userAgent)) {
-      window.location.href = `https://play.google.com/store/apps/details?id=${appPackageName}`;
-    } else if (/iPad|iPhone|iPod/i.test(userAgent)) {
-      window.location.href = 'https://apps.apple.com/in/app/rtd-transit-watch/id872831137';
+  const handleButtonClick = () => {
+    if (appInstalled) {
+      // If app is installed, open the app using the custom URI scheme
+      window.location.href = appScheme;
+    } else {
+      // If app is not installed, redirect to the Play Store
+      redirectToPlayStore();
     }
   };
 
@@ -129,7 +131,7 @@ export default function Home() {
         <h2 className="text-xl sm:text-xl mb-4 font-semibold">If you are concerned about your safety, contact the transit police.</h2>
 
         <div className="flex flex-col gap-4">
-          <button className="w-full h-16 sm:h-20 border border-red-500 text-red-500 text-lg sm:text-xl font-semibold py-2 sm:py-3 rounded-lg flex items-center justify-center hover:bg-red-100 transition duration-300" onClick={redirectToAppStore}>
+          <button className="w-full h-16 sm:h-20 border border-red-500 text-red-500 text-lg sm:text-xl font-semibold py-2 sm:py-3 rounded-lg flex items-center justify-center hover:bg-red-100 transition duration-300" onClick={handleButtonClick}>
             <div className='mb-5 mr-2'>
               <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd">
                 <path d="M22 24h-20v-24h14l6 6v18zm-7-23h-12v22h18v-16h-6v-6zm3 15v1h-12v-1h12zm0-3v1h-12v-1h12zm0-3v1h-12v-1h12zm-2-4h4.586l-4.586-4.586v4.586z"/>
