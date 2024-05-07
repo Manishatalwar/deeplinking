@@ -7,8 +7,8 @@ import { useState, useEffect } from 'react';
 export default function Home() {
   const [appInstalled, setAppInstalled] = useState(false);
   const appScheme = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
-  const appStoreUrl = 'https://play.google.com/store/apps/details?id=com.thebrassstargroup.rtduserapp';
-  const appStoreUrliOS = 'https://apps.apple.com/in/app/rtd-transit-watch/id872831137';
+  const appStoreUrl = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
+  const appStoreUrliOS = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
 
   useEffect(() => {
     // Check if the app is installed
