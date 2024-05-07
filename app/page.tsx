@@ -84,29 +84,60 @@ export default function Home() {
       window.location.href = appStoreUrliOS;
     }
   };
+  // const handleButtonClick = async () => {
+  //   try {
+  //     window.location.href = appScheme;
+  
+  //     // Check if the app was successfully launched
+  //     setTimeout(() => {
+  //       // alert(document.hidden)
+  //       if (document.hidden) {
+        
+  //         console.log("App opened successfully!");
+  //       } else {
+      
+  //         console.log("Failed to open the app.");
+  //         redirectToAppStore();
+  //       }
+  //     }, 1000); // Wait for 1 second before checking
+  //   } catch (error) {
+  //     // This block will only catch errors if they are thrown synchronously during the execution of the try block
+  //     console.error(error);
+  //     redirectToAppStore();
+  //   }
+  // };
+  
   const handleButtonClick = async () => {
     try {
+      // Attempt to open the app
       window.location.href = appScheme;
   
       // Check if the app was successfully launched
       setTimeout(() => {
-        // alert(document.hidden)
+        // For Android, check if the app was opened successfully
         if (document.hidden) {
-        
+        alert("app open");
           console.log("App opened successfully!");
         } else {
-      
-          console.log("Failed to open the app.");
-          redirectToAppStore();
+          // For iOS, check if the app is installed
+          if (isAppInstallediOS()) {
+            alert("app alredy install");
+            console.log("App is already installed on iOS.");
+          } else {
+            alert("not install");
+            // If the app is not installed, redirect to the App Store
+            console.log("Redirecting to App Store for iOS.");
+            redirectToAppStore();
+          }
         }
       }, 1000); // Wait for 1 second before checking
     } catch (error) {
       // This block will only catch errors if they are thrown synchronously during the execution of the try block
       console.error(error);
+      // Redirect to the app store for both Android and iOS in case of error
       redirectToAppStore();
     }
   };
-  
   
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gray-100">
