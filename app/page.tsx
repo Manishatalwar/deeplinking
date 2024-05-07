@@ -7,9 +7,8 @@ import { useState, useEffect } from 'react';
 export default function Home() {
   const [appInstalled, setAppInstalled] = useState(false);
   const appScheme = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
-  const appStoreUrl = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
-  const appStoreUrliOS = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
-
+  const appStoreUrl = 'https://play.google.com/store/apps/details?id=com.thebrassstargroup.rtduserapp';
+  const appStoreUrliOS = 'https://apps.apple.com/in/app/rtd-transit-watch/id872831137';
   useEffect(() => {
     // Check if the app is installed
     const checkAppInstalled = () => {
@@ -23,7 +22,6 @@ export default function Home() {
 
     checkAppInstalled();
   }, []);
-
   const isAppInstallediOS = () => {
     // Check if the device is iOS and the app can be opened
     return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
@@ -31,9 +29,18 @@ export default function Home() {
 
   const isAppInstalledAndroid = () => {
     // Check if the app can be opened on Android
-    // We assume the app is installed if it's being opened from an Android device
-    return /Android/i.test(navigator.userAgent);
+    return window.document && window.document.URL.indexOf(appScheme) !== -1;
   };
+  // const isAppInstallediOS = () => {
+  //   // Check if the device is iOS and the app can be opened
+  //   return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
+  // };
+
+  // const isAppInstalledAndroid = () => {
+  //   // Check if the app can be opened on Android
+  //   // We assume the app is installed if it's being opened from an Android device
+  //   return /Android/i.test(navigator.userAgent);
+  // };
 
   const redirectToAppStore = () => {
     // Redirect to Play Store for Android or App Store for iOS
@@ -46,9 +53,21 @@ export default function Home() {
     }
   };
 
+
   const handleButtonClick = () => {
     if (appInstalled) {
-      window.location.href = appScheme; // Open the app
+      // Attempt to open the app
+      window.location.href = appScheme;
+      
+      // Check if the app was opened
+      setTimeout(() => {
+        if (!document.hidden) {
+          console.log("App opened successfully!");
+        } else {
+          console.log("Failed to open the app.");
+          redirectToAppStore(); // Redirect to app store as a fallback
+        }
+      }, 1000); // Wait for 1 second before checking
     } else {
       redirectToAppStore();
     }
