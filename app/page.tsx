@@ -5,20 +5,20 @@
 import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const [appInstalled, setAppInstalled] = useState(false);
+  // const [appInstalled, setAppInstalled] = useState<boolean>(false); // Explicitly specify the type as boolean
+
   const appScheme = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
   const appStoreUrl = 'https://play.google.com/store/apps/details?id=com.thebrassstargroup.rtduserapp';
   const appStoreUrliOS = 'https://apps.apple.com/in/app/rtd-transit-watch/id872831137';
-  useEffect(() => {
-    const checkAppInstalled = async () => {
-      const installed = await isAppInstalledAndroid();
-      setAppInstalled(installed);
-      alert("install", installed);
-    };
   
-    checkAppInstalled();
-  }, []);
-  
+  // useEffect(() => {
+  //   const checkAppInstalled = async () => {
+  //     const installed: boolean = await isAppInstalledAndroid(); // Explicitly specify the type as boolean
+  //     setAppInstalled(installed);
+  //   };
+
+  //   checkAppInstalled();
+  // }, []);
 
   // const isAppInstallediOS = () => {
   //   // Check if the device is iOS and the app can be opened
@@ -92,10 +92,10 @@ export default function Home() {
       setTimeout(() => {
         // alert(document.hidden)
         if (document.hidden) {
-          alert("App opened successfully!");
+        
           console.log("App opened successfully!");
         } else {
-          alert("Failed to open the app. Please make sure the app is installed.");
+      
           console.log("Failed to open the app.");
           redirectToAppStore();
         }
