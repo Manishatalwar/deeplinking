@@ -87,7 +87,7 @@ import { useState, useEffect } from 'react';
 export default function Home() {
   const [appInstalled, setAppInstalled] = useState(false);
   const appPackageName = 'com.thebrassstargroup.rtduserapp'; // Package name of the app
-  const appScheme = 'thebrassstargroup-rtd://'; // Custom URI scheme for your app
+  const appScheme = 'thebrassstargroup-rtd'; // Custom URI scheme for our app
 
   useEffect(() => {
     // Check if the app is installed
