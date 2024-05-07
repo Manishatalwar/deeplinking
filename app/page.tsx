@@ -6,7 +6,6 @@ export default function Home() {
   const [appInstalled, setAppInstalled] = useState(false);
   const appPackageName = 'com.thebrassstargroup.rtduserapp'; // Package name of the app
   const appScheme = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
-
   const appStoreUrl = `https://play.google.com/store/apps/details?id=${appPackageName}`;
   const appStoreUrliOS = `https://apps.apple.com/in/app/rtd-transit-watch/id872831137`;
 
