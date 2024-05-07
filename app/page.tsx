@@ -10,27 +10,16 @@ export default function Home() {
   const appStoreUrl = 'https://play.google.com/store/apps/details?id=com.thebrassstargroup.rtduserapp';
   const appStoreUrliOS = 'https://apps.apple.com/in/app/rtd-transit-watch/id872831137';
   useEffect(() => {
-    // Check if the app is installed
-    const checkAppInstalled = () => {
-      // Check if the app scheme can be invoked
-      if (isAppInstallediOS() || isAppInstalledAndroid()) {
-        setAppInstalled(true);
-      } else {
-        setAppInstalled(false);
-      }
+    const checkAppInstalled = async () => {
+      const installed = await isAppInstalledAndroid();
+      setAppInstalled(installed);
+      alert("install", installed);
     };
-
+  
     checkAppInstalled();
   }, []);
-  const isAppInstallediOS = () => {
-    // Check if the device is iOS and the app can be opened
-    return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
-  };
+  
 
-  const isAppInstalledAndroid = () => {
-    // Check if the app can be opened on Android
-    return window.document && window.document.URL.indexOf(appScheme) !== -1;
-  };
   // const isAppInstallediOS = () => {
   //   // Check if the device is iOS and the app can be opened
   //   return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
@@ -38,10 +27,53 @@ export default function Home() {
 
   // const isAppInstalledAndroid = () => {
   //   // Check if the app can be opened on Android
-  //   // We assume the app is installed if it's being opened from an Android device
-  //   return /Android/i.test(navigator.userAgent);
+  //   return window.document && window.document.URL.indexOf(appScheme) !== -1;
   // };
-
+  const isAppInstallediOS = () => {
+    // Check if the device is iOS and the app can be opened
+    return /iPad|iPhone|iPod/.test(navigator.platform) && 'standalone' in window.navigator && window.navigator.standalone;
+  };
+  const isAppInstalledAndroid = () => {
+    // Check if the device is Android
+    const isAndroid = /Android/i.test(navigator.userAgent);
+  
+    // If it's Android, attempt to open the app scheme
+    if (isAndroid) {
+      return new Promise((resolve) => {
+        const appScheme = 'thebrassstargroup-rtd://thethebrassstargroup.com/report';
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = appScheme;
+  
+        // Define a function to handle visibility change events
+        const handleVisibilityChange = () => {
+          // If the document is hidden, the app scheme attempt was unsuccessful
+          const isInstalled = !document.hidden;
+          // Remove the event listener
+          document.removeEventListener('visibilitychange', handleVisibilityChange);
+          // Resolve the promise with the installation status
+          resolve(isInstalled);
+        };
+  
+        // Add event listener for visibility change
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+  
+        // Append the iframe to the document
+        document.body.appendChild(iframe);
+  
+        // Remove the iframe after a certain time to prevent clutter
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 1000); // Remove the iframe after 1 second
+      });
+    }
+  
+    // Return false for non-Android devices
+    return false;
+  };
+  
+  
+  
   const redirectToAppStore = () => {
     // Redirect to Play Store for Android or App Store for iOS
     const userAgent = navigator.userAgent || navigator.vendor;
@@ -52,22 +84,28 @@ export default function Home() {
       window.location.href = appStoreUrliOS;
     }
   };
-
-  const handleButtonClick = () => {
-    console.log("appInstalled",appInstalled);
-    if (appInstalled) {
-            window.location.href = appScheme; // Open the app
-          } else {
-            const userAgent = navigator.userAgent || navigator.vendor;
-            if (/android/i.test(userAgent)) {
-              window.location.href = appStoreUrl; // Redirect to Play Store
-            } else {
-              redirectToAppStore(); // Redirect to App Store for iOS
-            }
-          }
-   
+  const handleButtonClick = async () => {
+    try {
+      window.location.href = appScheme;
   
-   };
+      // Check if the app was successfully launched
+      setTimeout(() => {
+        // alert(document.hidden)
+        if (document.hidden) {
+          alert("App opened successfully!");
+          console.log("App opened successfully!");
+        } else {
+          alert("Failed to open the app. Please make sure the app is installed.");
+          console.log("Failed to open the app.");
+          redirectToAppStore();
+        }
+      }, 1000); // Wait for 1 second before checking
+    } catch (error) {
+      // This block will only catch errors if they are thrown synchronously during the execution of the try block
+      console.error(error);
+      redirectToAppStore();
+    }
+  };
   
   
   return (
