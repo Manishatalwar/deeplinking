@@ -53,10 +53,8 @@ export default function Home() {
     }
   };
 
-
   const handleButtonClick = () => {
-    if (appInstalled) {
-      // Attempt to open the app
+    // Attempt to open the app
       window.location.href = appScheme;
       
       // Check if the app was opened
@@ -68,9 +66,6 @@ export default function Home() {
           redirectToAppStore(); // Redirect to app store as a fallback
         }
       }, 1000); // Wait for 1 second before checking
-    } else {
-      redirectToAppStore();
-    }
   };
   
   return (
