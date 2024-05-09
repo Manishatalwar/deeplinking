@@ -1,91 +1,104 @@
 
 "use client";
-import { useState, useEffect } from "react";
+// Import necessary React hooks
+import { useEffect } from "react";
 
+// Define the Home component
 export default function Home() {
-  const appScheme = "thebrassstargroup-rtd://thethebrassstargroup.com/report";
-  const appStoreUrl =
-    "https://play.google.com/store/apps/details?id=com.thebrassstargroup.rtduserapp";
-  const appStoreUrliOS =
-    "https://apps.apple.com/in/app/rtd-transit-watch/id872831137";
+  // Define the app scheme for deep linking
+  const appSchemeAndroid = "thebrassstargroup-rtd://thethebrassstargroup.com/report";
+  const appSchemeiOS = "thebrassstargroup-rtd://thebrassstargroup.com/report";
+  
+  // Define URLs for the app stores
+  const appStoreUrl = "https://play.google.com/store/apps/details?id=com.thebrassstargroup.rtduserapp";
+  const appStoreUrliOS = "https://apps.apple.com/in/app/rtd-transit-watch/id872831137";
 
+  // Function to redirect users to the appropriate app store
   const redirectToAppStore = () => {
+    // Determine the user's platform and redirect accordingly
     const userAgent = navigator.userAgent || navigator.vendor;
     if (/android/i.test(userAgent)) {
-      window.location.href = appStoreUrl;
+      window.location.href = appStoreUrl; // Redirect to Google Play Store for Android
     } else if (/iPad|iPhone|iPod/i.test(userAgent)) {
-      window.location.href = appStoreUrliOS;
+      window.location.href = appStoreUrliOS; // Redirect to App Store for iOS
     }
   };
 
+  // Function to handle button click for Android
   const handleAndroidButtonClick = async () => {
     try {
-      window.location.href = appScheme;
+      window.location.href = appSchemeAndroid; // Attempt to open the app using the app scheme
       setTimeout(() => {
+        // Check if the app opened successfully after a delay
         if (document.hidden) {
-          console.log("App opened successfully!");
+          console.log("App opened successfully!"); // Log success message
         } else {
-          console.log("Failed to open the app.");
-          redirectToAppStore();
+          console.log("Failed to open the app."); // Log failure message
+          redirectToAppStore(); // Redirect to the appropriate app store
         }
-      }, 1000);
+      }, 1000); // Wait for 1 second before checking
     } catch (error) {
-      console.error(error);
-      redirectToAppStore();
+      console.error(error); // Log any errors
+      redirectToAppStore(); // Redirect to the appropriate app store
     }
   };
 
+  // Function to handle button click for iOS
   const handleiOSButtonClick = async () => {
     try {
+      // Check if the app is installed on iOS using a modal dialog
       const isInstalled = await isAppInstallediOS();
       if (isInstalled) {
-        window.location.href = appScheme;
+        window.location.href = appSchemeiOS; // Open the app if installed
       } else {
-        redirectToAppStore();
+        redirectToAppStore(); // Redirect to the App Store if not installed
       }
     } catch (error) {
-      console.error(error);
-      redirectToAppStore();
+      console.error(error); // Log any errors
+      redirectToAppStore(); // Redirect to the appropriate app store
     }
   };
 
+  // Function to check if the app is installed on iOS
   const isAppInstallediOS = () => {
     return new Promise((resolve) => {
+      // Check if the user is using Safari and if the app is added to the home screen
       if (
         /iPad|iPhone|iPod/.test(navigator.platform) &&
         "standalone" in window.navigator &&
         window.navigator.standalone
       ) {
-        resolve(true);
+        resolve(true); // Resolve as true if the app is installed
       } else {
+        // prompt the user with a modal dialog
         const modal = document.createElement("div");
-        modal.className =
-          "fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75";
-
+        modal.className = "fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-75";
+        
         const modalContent = document.createElement("div");
         modalContent.className = "bg-white p-6 rounded shadow-md";
-
+        
         const message = document.createElement("p");
         message.textContent = "Is the app installed on your device?";
         message.className = "text-black py-2";
-
+        
         const yesButton = document.createElement("button");
         yesButton.textContent = "Yes";
         yesButton.className = "px-4 py-2 bg-green-500 text-white rounded mr-4";
         yesButton.onclick = () => {
           modal.remove();
-          resolve(true);
+          resolve(true); // Resolve as true if the user confirms
         };
-
+        
         const noButton = document.createElement("button");
         noButton.textContent = "No";
         noButton.className = "px-4 py-2 bg-red-500 text-white rounded";
         noButton.onclick = () => {
           modal.remove();
-          redirectToAppStore();
-          resolve(false);
+          redirectToAppStore(); // Redirect to the App Store if the user denies
+          resolve(false); // Resolve as false if the user denies
         };
-
+        
+        // Append elements to create the modal dialog
         modalContent.appendChild(message);
         modalContent.appendChild(yesButton);
         modalContent.appendChild(noButton);
@@ -95,20 +108,23 @@ export default function Home() {
     });
   };
 
+  // Function to handle button click
   const handleClick = () => {
+    // Determine the user's platform and call the appropriate function
     const userAgent = navigator.userAgent || navigator.vendor;
     if (/android/i.test(userAgent)) {
-      handleAndroidButtonClick();
+      handleAndroidButtonClick(); // Handle Android button click
     } else if (/iPad|iPhone|iPod/i.test(userAgent)) {
-      handleiOSButtonClick();
+      handleiOSButtonClick(); // Handle iOS button click
     }
   };
 
+  // Return the JSX for the Home component
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gray-100">
       <div className="text-center border p-6 sm:p-16 rounded-lg">
         <div className="flex flex-col items-center mb-4">
-          <h1 className="text-2xl sm:text-5xl font-semibold mb-4">Safety</h1>
+          <h1 className="text-2xl sm:text-5xl font-semibold mb-4 "  style={{ color: "black" }}>Safety</h1>
           <img
             src="/warning.png"
             alt="Warning Icon"
@@ -124,7 +140,7 @@ export default function Home() {
         </h2>
 
         <div className="flex flex-col gap-4">
-          <button className="w-full h-16 sm:h-20 border border-red-500 text-red-500 text-lg sm:text-xl font-semibold py-2 sm:py-3 rounded-lg flex items-center justify-center hover:bg-red-100 transition duration-300">
+        <button className="w-full h-16 sm:h-20 border border-red-500 text-red-500 text-lg sm:text-xl font-semibold py-2 sm:py-3 rounded-lg flex items-center justify-center hover:bg-red-100 transition duration-300">
             <div className="mb-5 mr-2">
               <svg
                 width="24"
@@ -161,9 +177,8 @@ export default function Home() {
               <span className="text-sm text-gray-600">303.434.1900</span>
             </div>
           </button>
-
           <button
-            onClick={handleClick}
+            onClick={handleClick} // Handle button click
             className="w-full h-16 sm:h-20 border border-red-500 text-red-500 text-lg sm:text-xl font-semibold py-2 sm:py-3 rounded-lg flex items-center justify-center hover:bg-red-100 transition duration-300"
           >
             <div className="mb-5 mr-2">
